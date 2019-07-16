@@ -9,18 +9,24 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float jump = 10;
     [SerializeField] Map map = null;
     [SerializeField] Logic logic = null;
+    [SerializeField] Range lastTarget = null;
 
     Rigidbody2D body = null;
+    Shooter shooter = null;
     GameObject frontObs = null;
     Vector2 direction = Vector2.left;
+    float gravityScale = 10;
     float xdetect = 0.75f;
     bool endStair = false;
     bool isJump = false;
+    bool isPlay = false;
     float targetX = Constants.INFINITY;
 
     void Awake()
     {
         body = GetComponent<Rigidbody2D>();
+        shooter = GetComponent<Shooter>();
+        gravityScale = body.gravityScale;
     }
 
     void Start()
@@ -30,36 +36,46 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if(isPlay)
+        {
+            if(Input.GetMouseButtonDown(0))
+            {
+                shooter.Shoot();
+            }
+        }
+
         if(frontObs)
         {
             if(Math.Abs(transform.position.x - frontObs.transform.position.x) <= xdetect && !isJump)
             {
                 Vector2 cur = transform.position;
                 Vector2 target = new Vector2(cur.x + direction.x * 0.5f, cur.y + frontObs.transform.localScale.y);
-                Debug.Log("Target : " + target);
                 StartCoroutine("Jump", target);
             }
-        }
-        else
-        {
-            
         }
     } 
 
     void FixedUpdate()
     {
-        if(!isJump)
+        if(!isJump && !isPlay)
         {
             if((direction.x < 0 && targetX < body.position.x) || (direction.x > 0 && targetX > body.position.x) || targetX == Constants.INFINITY)
             {
                 body.MovePosition(body.position + direction * speedX * Time.fixedDeltaTime);
+            }
+            else
+            {
+                //for test moving
+                // MoveToNextStair();
+                Reverse();
+                StartPlay();
+                isPlay = true;
             }
         }
     }
 
     IEnumerator Jump(Vector2 target)
     {
-        Debug.Log("Jump");
         isJump = true;
         body.gravityScale = 0;
         while(transform.position.y < target.y)
@@ -87,10 +103,17 @@ public class PlayerController : MonoBehaviour
 
         transform.position = new Vector2(target.x, transform.position.y);
         NewFontObs();
-        body.gravityScale = 1;
+        body.gravityScale = gravityScale;
         isJump = false;
     }
 
+    void MoveToNextStair()
+    {
+        targetX = Constants.INFINITY;
+        Reverse();
+        logic.NextStair();
+        NewFontObs();
+    }
     void NewFontObs()
     {
         frontObs = logic.NextFontObs();
@@ -100,11 +123,17 @@ public class PlayerController : MonoBehaviour
         }
         else 
         {
-            targetX = transform.position.x + direction.x * 1.5f;
-            // logic.NextStair();
-            // direction *= -1;
-            // NewFontObs();
+            targetX = transform.position.x + direction.x * lastTarget.GetRandomAsInt();
         }
-        
+    }
+    void Reverse()
+    {
+        direction.x *= -1;
+        transform.localScale = transform.localScale * new Vector2(-1, 1);
+    }
+
+    void StartPlay()
+    {
+        shooter.StartAim();
     }
 }
