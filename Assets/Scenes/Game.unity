@@ -488,7 +488,7 @@ MonoBehaviour:
   aim: {fileID: 480611763}
   shootPoint: {fileID: 1910078782}
   speed: 30
-  bulletSpeed: 50
+  bulletSpeed: 30
 --- !u!1 &250987026
 GameObject:
   m_ObjectHideFlags: 0
@@ -1194,9 +1194,9 @@ MonoBehaviour:
   - {r: 0.26415092, g: 0.25792095, b: 0.25792095, a: 1}
   - {r: 0.13207549, g: 0.13145249, b: 0.13145249, a: 1}
   startXMin: 0
-  startXMax: 1
+  startXMax: 3
   highMin: 3
-  highMax: 4
+  highMax: 5
 --- !u!1 &994534924
 GameObject:
   m_ObjectHideFlags: 0
