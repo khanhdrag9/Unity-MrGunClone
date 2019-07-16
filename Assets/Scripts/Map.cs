@@ -2,31 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Map : MonoBehaviour
 {
     [SerializeField]GameObject square = null;
     [SerializeField] float start = -7;
     [SerializeField] float end = 7;
-    [SerializeField] Vector2 distance = new Vector2(0.5f, 0.5f);
+    public Vector2 distance = new Vector2(0.5f, 0.5f);
     [SerializeField] Color[] colors;
     [SerializeField] int startXMin;
     [SerializeField] int startXMax;
     [SerializeField] int highMin;
     [SerializeField] int highMax;
-    
+   
     int startColor = 0;
     int startOrder = 100;
     int startLine = 0;
 
-    class Stair
-    {
-        public List<GameObject> stairList = null;
-        public GameObject wall = null;
-        public Stair()
-        {
-            stairList = new List<GameObject>();
-        }
-    }
+    public List<Stair> stairs = new List<Stair>();
 
     public enum Direction { LEFT, RIGHT }
 
@@ -38,7 +31,10 @@ public class Map : MonoBehaviour
             int startX = Random.Range(startXMin, startXMax);
             int high = Random.Range(highMin, highMax);
             Direction direction = i % 2 == 0 ? Direction.LEFT : Direction.RIGHT;
-            GenerateStairs(direction, startLine, startX, high, startColor, startOrder, distance);
+            var stair = GenerateStairs(direction, startLine, startX, high, startColor, startOrder, distance);
+            stair.SetEnableColliderStair(false);
+            stair.SetEnableColliderWall(false);
+            stairs.Add(stair);
 
             startColor++;
             startOrder--;
@@ -63,8 +59,7 @@ public class Map : MonoBehaviour
             stair.stairList.Add(square);
         }
         GameObject wall = SpawnSquare(Direction.RIGHT, new Vector2(this.start / rate.x, startLine), GetColor(colorIndex + 1), startOrder - 1, rate);
-        wall.transform.localScale += new Vector3(0, high - 1, 0);
-
+        wall.transform.localScale += new Vector3(0, (high - 1) * wall.transform.localScale.y, 0);
         stair.wall = wall;
 
         return stair;
@@ -79,7 +74,12 @@ public class Map : MonoBehaviour
         sprite.flipX = from == Direction.LEFT ? true : false;
         sprite.color = color;
         sprite.sortingOrder = order;
-  
+
+        var boxC2 = obj.GetComponent<BoxCollider2D>();
+        Vector2 newOffset = boxC2.offset;
+        newOffset.x *= from == Direction.LEFT ? -1 : 1;
+        boxC2.offset = newOffset;
+
         return obj;
     }
 
