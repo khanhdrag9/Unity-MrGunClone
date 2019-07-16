@@ -2,105 +2,109 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] float speedX = 10;
     [SerializeField] float jump = 10;
     [SerializeField] Map map = null;
+    [SerializeField] Logic logic = null;
 
     Rigidbody2D body = null;
-    Stair currentStair = null;
-    GameObject curObs = null;
-    int curObsIndex = 0;
-    int stairIndex = -1;
-    Vector2 direction = Vector2.right;
-    Vector2 distanceDetect = Vector2.zero;
+    GameObject frontObs = null;
+    Vector2 direction = Vector2.left;
+    float xdetect = 0.75f;
+    bool endStair = false;
+    bool isJump = false;
+    float targetX = Constants.INFINITY;
 
-    public enum Status { MOVE, JUMP, IDLE }
-    Status status = Status.IDLE;
-
+    void Awake()
+    {
+        body = GetComponent<Rigidbody2D>();
+    }
 
     void Start()
     {
-        body = GetComponent<Rigidbody2D>();
-        CompleteMoveStair();
-        distanceDetect = map.distance * 0.75f;
-        NextStair();
-    }
+        NewFontObs();
+    }   
 
     void Update()
     {
-       
-    }
+        if(frontObs)
+        {
+            if(Math.Abs(transform.position.x - frontObs.transform.position.x) <= xdetect && !isJump)
+            {
+                Vector2 cur = transform.position;
+                Vector2 target = new Vector2(cur.x + direction.x * 0.5f, cur.y + frontObs.transform.localScale.y);
+                Debug.Log("Target : " + target);
+                StartCoroutine("Jump", target);
+            }
+        }
+        else
+        {
+            
+        }
+    } 
 
     void FixedUpdate()
     {
-        if(status == Status.MOVE)
+        if(!isJump)
         {
-            if (Math.Abs(curObs.transform.position.x - transform.position.x) > distanceDetect.x)
+            if((direction.x < 0 && targetX < body.position.x) || (direction.x > 0 && targetX > body.position.x) || targetX == Constants.INFINITY)
             {
-                body.MovePosition(body.position + direction * new Vector2(speedX, 0) * Time.fixedDeltaTime);
-            }
-            else
-            {
-                status = Status.JUMP;
-                body.MovePosition(new Vector2(curObs.transform.position.x + distanceDetect.x, transform.position.y));
+                body.MovePosition(body.position + direction * speedX * Time.fixedDeltaTime);
             }
         }
-        else if(status == Status.JUMP)
-        {
-            body.gravityScale = 0;
-            if (Math.Abs(curObs.transform.position.y - transform.position.y) < distanceDetect.y)
-            {
-                body.MovePosition(body.position + Vector2.up * new Vector2(0, jump) * Time.fixedDeltaTime);
-            }
-            else
-            {
-                status = Status.MOVE;
-                body.MovePosition(new Vector2(transform.position.x, curObs.transform.position.y + distanceDetect.y));
-            }
-        }
-        
-        
     }
 
-    private void Jump()
+    IEnumerator Jump(Vector2 target)
     {
-        
+        Debug.Log("Jump");
+        isJump = true;
+        body.gravityScale = 0;
+        while(transform.position.y < target.y)
+        {
+            transform.Translate(Vector2.up * jump * Time.deltaTime);
+            yield return new WaitForEndOfFrame();
+        }
+        transform.position = new Vector2(transform.position.x, target.y);
+        if(target.x < transform.position.x)
+        {
+            while(transform.position.x > target.x)
+            {
+                transform.Translate(Vector2.left * speedX * Time.deltaTime);
+                yield return new WaitForEndOfFrame();
+            }
+        }
+        else if(target.x > transform.position.y)
+        {
+            while(transform.position.x < target.x)
+            {
+                transform.Translate(Vector2.right * speedX * Time.deltaTime);
+                yield return new WaitForEndOfFrame();
+            }
+        }
+
+        transform.position = new Vector2(target.x, transform.position.y);
+        NewFontObs();
+        body.gravityScale = 1;
+        isJump = false;
     }
 
-    //IEnumerator MoveYTo(float y)
-    //{
-        
-    //}
-
-    //IEnumerator MoveXTo(float x)
-    //{
-        
-    //}
-
-    public void NextStair()
+    void NewFontObs()
     {
-        //body.velocity = direction * speedX;
-        //numberStair = map.stairs[stairIndex].stairList.Count;
-        status = Status.MOVE;
-    }
-    public void CompleteMoveStair()
-    {
-        if(stairIndex >= 0 && stairIndex <= map.stairs.Count)
+        frontObs = logic.NextFontObs();
+        if(frontObs)
         {
-            map.stairs[stairIndex].SetEnableColliderWall(true);
+            frontObs.GetComponent<BoxCollider2D>().enabled = true;
         }
-        stairIndex++;
-        if (stairIndex >= 0 && stairIndex <= map.stairs.Count)
+        else 
         {
-            currentStair = map.stairs[stairIndex];
-            currentStair.SetEnableColliderStair(true);
-            curObsIndex = 0;
-            curObs = currentStair.stairList[curObsIndex];
+            targetX = transform.position.x + direction.x * 1.5f;
+            // logic.NextStair();
+            // direction *= -1;
+            // NewFontObs();
         }
-        direction *= -1;
+        
     }
 }
