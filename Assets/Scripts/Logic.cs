@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class Logic : MonoBehaviour
 {
-    [SerializeField] Map map;
+    [SerializeField] Map map = null;
+    [SerializeField] EnemyManager enemyMgr = null;
+    [SerializeField] PlayerController player = null;
 
     Stair targetStair =  null;
     int stairIndex = 0;
@@ -15,6 +17,7 @@ public class Logic : MonoBehaviour
         stairIndex = index;
         indexObs = 0;
         targetStair = map.stairs[stairIndex];
+        targetStair.SetEnableColliderStair(true);
     }
 
     public GameObject NextFontObs()
@@ -41,6 +44,19 @@ public class Logic : MonoBehaviour
     {
         stairIndex++;
         targetStair = null;
+        GetCurrentStair(stairIndex);
+        map.UpdateColor(stairIndex - 1);
+    }
+
+    public void Play()
+    {
+        NextStair();
+        enemyMgr.SpawnAtStair(targetStair, 0);
+    }
+
+    public void NextEnemy()
+    {
+        player.MoveToNextStair();
     }
 
     public void Reset()

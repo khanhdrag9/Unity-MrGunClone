@@ -9,15 +9,19 @@ public class Map : MonoBehaviour
     [SerializeField] float start = -7;
     [SerializeField] float end = 7;
     public Vector2 distance = new Vector2(0.5f, 0.5f);
-    [SerializeField] Color[] colors;
+    [SerializeField] Color from = Color.white;
+    [SerializeField] Color to = Color.black;
+    [SerializeField] int numberColor = 15;
     [SerializeField] int startXMin;
     [SerializeField] int startXMax;
     [SerializeField] int highMin;
     [SerializeField] int highMax;
+    [SerializeField] float timeFade = 3;
    
     int startColor = 0;
     int startOrder = 100;
     int startLine = 0;
+    Color rateColor = Color.white;
 
     public List<Stair> stairs = new List<Stair>();
 
@@ -25,6 +29,7 @@ public class Map : MonoBehaviour
 
     void Start()
     {
+        rateColor = (to - from) / numberColor;
         int numberStair = 15;
         for(int i = 0; i < numberStair; i++)
         {
@@ -42,9 +47,17 @@ public class Map : MonoBehaviour
         }
     }
 
-    void Update()
+    public void UpdateColor(int center)
     {
-        
+        for (int i = 0; i < stairs.Count; i++)
+        {
+            Stair stair = stairs[i];
+            Color curStair = stair.stairList[0].GetComponent<SpriteRenderer>().color;
+            Color curWall = stair.wall.GetComponent<SpriteRenderer>().color;
+
+            if (i < center) stair.SetColor(changeColor(curStair, 1), changeColor(curWall, 1), timeFade);
+            else if(i > center)stair.SetColor(changeColor(curStair, -1), changeColor(curWall, -1), timeFade);
+        }
     }
 
     Stair GenerateStairs(Direction from, int startLine, float startX, int high, int colorIndex, int order, Vector2 rate)
@@ -71,21 +84,28 @@ public class Map : MonoBehaviour
         obj.transform.position = new Vector2(position.x * rate.x, position.y * rate.y);
 
         var sprite = obj.GetComponent<SpriteRenderer>();
-        sprite.flipX = from == Direction.LEFT ? true : false;
+        //sprite.flipX = from == Direction.LEFT ? true : false;
         sprite.color = color;
         sprite.sortingOrder = order;
 
-        var boxC2 = obj.GetComponent<BoxCollider2D>();
-        Vector2 newOffset = boxC2.offset;
-        newOffset.x *= from == Direction.LEFT ? -1 : 1;
-        boxC2.offset = newOffset;
+        obj.transform.localScale = obj.transform.localScale * new Vector2(from == Direction.LEFT ? -1 : 1, 1);
+
+        //var boxC2 = obj.GetComponent<BoxCollider2D>();
+        //Vector2 newOffset = boxC2.offset;
+        //newOffset.x *= from == Direction.LEFT ? -1 : 1;
+        //boxC2.offset = newOffset;
 
         return obj;
     }
 
     Color GetColor(int index)
     {
-        if (index >= colors.Length) return Color.black;
-        else return colors[index];
+        Color newColor = rateColor * index + from;
+        return newColor;
+    }
+
+    Color changeColor(Color current, int direction)
+    {
+        return current + direction * rateColor;
     }
 }

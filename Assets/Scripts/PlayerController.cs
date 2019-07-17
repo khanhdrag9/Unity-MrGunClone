@@ -65,8 +65,6 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                //for test moving
-                // MoveToNextStair();
                 Reverse();
                 StartPlay();
                 isPlay = true;
@@ -107,21 +105,17 @@ public class PlayerController : MonoBehaviour
         isJump = false;
     }
 
-    void MoveToNextStair()
+    public void MoveToNextStair()
     {
+        isPlay = false;
+        shooter.Reset();
         targetX = Constants.INFINITY;
-        Reverse();
-        logic.NextStair();
         NewFontObs();
     }
     void NewFontObs()
     {
         frontObs = logic.NextFontObs();
-        if(frontObs)
-        {
-            frontObs.GetComponent<BoxCollider2D>().enabled = true;
-        }
-        else 
+        if(!frontObs)
         {
             targetX = transform.position.x + direction.x * lastTarget.GetRandomAsInt();
         }
@@ -135,5 +129,6 @@ public class PlayerController : MonoBehaviour
     void StartPlay()
     {
         shooter.StartAim();
+        logic.Play();
     }
 }

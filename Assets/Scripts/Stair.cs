@@ -21,4 +21,14 @@ public class Stair
     {
         wall.GetComponent<BoxCollider2D>().enabled = value;
     }
+    public void SetColor(Color stair, Color wall, float duration)
+    {
+        foreach (var s in stairList)
+        {
+            //s.GetComponent<SpriteRenderer>().color = stair;
+            s.GetComponent<Wall>().ColorTo(stair, duration);
+        }
+        this.wall.GetComponent<Wall>().ColorTo(wall, duration);
+    }
+
 }
