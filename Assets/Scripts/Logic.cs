@@ -11,6 +11,36 @@ public class Logic : MonoBehaviour
     Stair targetStair =  null;
     int stairIndex = 0;
     int indexObs = 0;
+    bool isKillingPlayer = false;
+    bool wasCheckResult = false;
+
+    void Update()
+    {
+        if (!isKillingPlayer && player.shooter.BulletEndedAll() && !wasCheckResult)
+        {
+            CheckResultShoot();
+        }
+    }
+
+    void FixedUpdate()
+    {
+    }
+
+    void CheckResultShoot()
+    {
+        wasCheckResult = true;
+        if (enemyMgr.currentEnemy.isDied)
+        {
+            enemyMgr.DestroyCurrentEnemy();
+            NextEnemy();
+        }
+        else
+        {
+            isKillingPlayer = true;
+            player.shooter.StopAim();
+            Debug.Log("LOSE");
+        }
+    }
 
     void GetCurrentStair(int index)
     {
@@ -22,11 +52,11 @@ public class Logic : MonoBehaviour
 
     public GameObject NextFontObs()
     {
-        if(targetStair == null)
+        if (targetStair == null)
         {
             if(stairIndex == map.stairs.Count)
             {
-                //Create more 1 row...
+                map.AddStair();
             }
             GetCurrentStair(stairIndex);
         }
@@ -42,14 +72,17 @@ public class Logic : MonoBehaviour
 
     public void NextStair()
     {
+        map.AddStair();
         stairIndex++;
+        targetStair.SetEnableColliderWall(true);
         targetStair = null;
         GetCurrentStair(stairIndex);
-        map.UpdateColor(stairIndex - 1);
     }
 
     public void Play()
     {
+        wasCheckResult = false;
+        map.UpdateColor(stairIndex - 1);
         NextStair();
         enemyMgr.SpawnAtStair(targetStair, 0);
     }

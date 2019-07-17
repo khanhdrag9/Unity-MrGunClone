@@ -12,19 +12,22 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Range lastTarget = null;
 
     Rigidbody2D body = null;
-    Shooter shooter = null;
+    BoxCollider2D box = null;
+    public Shooter shooter { get; private set; }
     GameObject frontObs = null;
     Vector2 direction = Vector2.left;
     float gravityScale = 10;
-    float xdetect = 0.75f;
+    float xdetect = 0.15f;
     bool endStair = false;
     bool isJump = false;
     bool isPlay = false;
+    bool wasShoot = true;
     float targetX = Constants.INFINITY;
 
     void Awake()
     {
         body = GetComponent<Rigidbody2D>();
+        box = GetComponent<BoxCollider2D>();
         shooter = GetComponent<Shooter>();
         gravityScale = body.gravityScale;
     }
@@ -38,18 +41,20 @@ public class PlayerController : MonoBehaviour
     {
         if(isPlay)
         {
-            if(Input.GetMouseButtonDown(0))
+            if(Input.GetMouseButtonDown(0) && !wasShoot)
             {
                 shooter.Shoot();
+                wasShoot = true;
             }
         }
 
         if(frontObs)
         {
-            if(Math.Abs(transform.position.x - frontObs.transform.position.x) <= xdetect && !isJump)
+            if(Math.Abs(transform.position.x - frontObs.transform.position.x) <= xdetect + Mathf.Abs(transform.localScale.x / 2) && !isJump)
             {
                 Vector2 cur = transform.position;
-                Vector2 target = new Vector2(cur.x + direction.x * 0.5f, cur.y + frontObs.transform.localScale.y);
+                Vector2 target = new Vector2(cur.x + direction.x * 0.5f, transform.position.y + frontObs.transform.localScale.y);
+                Debug.Log("Jump : " + target);
                 StartCoroutine("Jump", target);
             }
         }
@@ -76,7 +81,8 @@ public class PlayerController : MonoBehaviour
     {
         isJump = true;
         body.gravityScale = 0;
-        while(transform.position.y < target.y)
+
+        while (transform.position.y < target.y)
         {
             transform.Translate(Vector2.up * jump * Time.deltaTime);
             yield return new WaitForEndOfFrame();
@@ -130,5 +136,6 @@ public class PlayerController : MonoBehaviour
     {
         shooter.StartAim();
         logic.Play();
+        wasShoot = false;
     }
 }

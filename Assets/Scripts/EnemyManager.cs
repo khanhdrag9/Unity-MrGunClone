@@ -6,6 +6,7 @@ public class EnemyManager : MonoBehaviour
 {
     [SerializeField] Enemy[] enemies = null;
     [SerializeField] Range xMore = null;
+    public Enemy currentEnemy { get; private set; }
 
     void Start()
     {
@@ -16,6 +17,12 @@ public class EnemyManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void DestroyCurrentEnemy()
+    {
+        Destroy(currentEnemy);
+        currentEnemy = null;
     }
 
     public Enemy SpawnAtStair(Stair stair, int index)
@@ -33,6 +40,7 @@ public class EnemyManager : MonoBehaviour
     public Enemy Spawn(int index)
     {
         var enemy = Instantiate(enemies[index]);
+        currentEnemy = enemy;
         return enemy;
     }
 }

@@ -19,7 +19,7 @@ public class Wall : MonoBehaviour
 
     public void ColorTo(Color to, float duration)
     {
-        sr.color = colorTo;
+        //sr.color = colorTo;
         StopAllCoroutines();
         StartCoroutine(ChangeColor(to, duration));
     }
@@ -32,8 +32,8 @@ public class Wall : MonoBehaviour
         {
             Color newColor = Color.Lerp(cur, to, t);
             sr.color = newColor;
-            //yield return new WaitForEndOfFrame();
-            yield return null;
+            yield return new WaitForEndOfFrame();
+            //yield return null;
         }
     }
 

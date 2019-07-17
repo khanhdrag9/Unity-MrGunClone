@@ -5,11 +5,11 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] float speedX = 0;
-    [SerializeField] Logic logic = null;
+    public bool isDied = false;
 
     void Start()
     {
-        
+    
     }
 
     // Update is called once per frame
@@ -20,11 +20,6 @@ public class Enemy : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if(collision.gameObject.tag == Constants.BULLET_TAG)
-        {
-            logic.NextEnemy();
-            Destroy(collision.gameObject);
-            Destroy(gameObject);
-        }
+        
     }
 }

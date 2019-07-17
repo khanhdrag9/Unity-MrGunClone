@@ -22,6 +22,7 @@ public class Map : MonoBehaviour
     int startOrder = 100;
     int startLine = 0;
     Color rateColor = Color.white;
+    Direction lastDirect = Direction.LEFT;
 
     public List<Stair> stairs = new List<Stair>();
 
@@ -36,10 +37,8 @@ public class Map : MonoBehaviour
             int startX = Random.Range(startXMin, startXMax);
             int high = Random.Range(highMin, highMax);
             Direction direction = i % 2 == 0 ? Direction.LEFT : Direction.RIGHT;
+            lastDirect = direction;
             var stair = GenerateStairs(direction, startLine, startX, high, startColor, startOrder, distance);
-            stair.SetEnableColliderStair(false);
-            stair.SetEnableColliderWall(false);
-            stairs.Add(stair);
 
             startColor++;
             startOrder--;
@@ -56,8 +55,19 @@ public class Map : MonoBehaviour
             Color curWall = stair.wall.GetComponent<SpriteRenderer>().color;
 
             if (i < center) stair.SetColor(changeColor(curStair, 1), changeColor(curWall, 1), timeFade);
-            else if(i > center)stair.SetColor(changeColor(curStair, -1), changeColor(curWall, -1), timeFade);
+            else stair.SetColor(changeColor(curStair, -1), changeColor(curWall, -1), timeFade);
         }
+    }
+
+    public Stair AddStair()
+    {
+        int startX = Random.Range(startXMin, startXMax);
+        int high = Random.Range(highMin, highMax);
+        lastDirect = lastDirect == Direction.LEFT ? Direction.RIGHT : Direction.LEFT;
+        var stair = GenerateStairs(lastDirect, startLine, startX, high, startColor, startOrder, distance);
+        startOrder--;
+        startLine += high;
+        return stair;
     }
 
     Stair GenerateStairs(Direction from, int startLine, float startX, int high, int colorIndex, int order, Vector2 rate)
@@ -74,6 +84,10 @@ public class Map : MonoBehaviour
         GameObject wall = SpawnSquare(Direction.RIGHT, new Vector2(this.start / rate.x, startLine), GetColor(colorIndex + 1), startOrder - 1, rate);
         wall.transform.localScale += new Vector3(0, (high - 1) * wall.transform.localScale.y, 0);
         stair.wall = wall;
+
+        stair.SetEnableColliderStair(false);
+        stair.SetEnableColliderWall(false);
+        stairs.Add(stair);
 
         return stair;
     }
