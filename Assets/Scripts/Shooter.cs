@@ -37,9 +37,16 @@ public class Shooter : MonoBehaviour
             gun.transform.Rotate(Vector3.forward * direction * speed * Time.deltaTime);
             float angle = Convert.ToInt32(gun.transform.localEulerAngles.z);
             if (angle >= aimRanger.max)
+            {
+                gun.transform.localEulerAngles = Vector3.forward * aimRanger.max;
                 direction = -1;
+            }
             else if (angle <= aimRanger.min || angle >= 180)
+            {
+                gun.transform.localEulerAngles = Vector3.forward * aimRanger.min;
                 direction = 1;
+            }
+                
         }
     }
 
@@ -73,21 +80,21 @@ public class Shooter : MonoBehaviour
 
     public void Shoot()
     {
-        //float angle = gun.transform.localEulerAngles.z;
-        //float x = 10 * Mathf.Cos(angle * Mathf.Deg2Rad);
-        //float y = 10 * Mathf.Sin(angle * Mathf.Deg2Rad);
-        //Vector2 offset = new Vector2(x, y).normalized;
         Shoot(shootPoint.transform.position);
     }
 
     private void Shoot(Vector3 to)
     {
-        Vector2 offset = (to - gun.transform.position).normalized;
-        var obj = Instantiate(bullet, shootPoint.transform.position, gun.transform.rotation);
+        float angle = gun.transform.localEulerAngles.z;
+        float x = 10 * Mathf.Cos(angle * Mathf.Deg2Rad);
+        float y = 10 * Mathf.Sin(angle * Mathf.Deg2Rad);
+        Vector2 offset = new Vector2(x, y).normalized;
+        //Vector2 offset = (to - gun.transform.position).normalized;
+        var obj = Instantiate(bullet);
+        obj.transform.position = shootPoint.transform.position;
         obj.gameObject.layer = gameObject.layer;
         shooted.Add(obj);
-        var body = obj.GetComponent<Rigidbody2D>();
-        body.velocity = offset * bulletSpeed;
+        obj.velocity = offset * bulletSpeed;
     }
 
     public void StopAim()

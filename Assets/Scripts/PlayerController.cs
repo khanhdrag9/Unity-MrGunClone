@@ -12,26 +12,25 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Map map = null;
     [SerializeField] Logic logic = null;
     [SerializeField] Range lastTarget = null;
+    [SerializeField] float detectX = 0.5f;
+    [SerializeField] float jumpX = 0.5f;
 
-    Rigidbody2D body = null;
     BoxCollider2D box = null;
     public Shooter shooter { get; private set; }
     GameObject frontObs = null;
     Vector2 direction = Vector2.left;
-    float gravityScale = 10;
-    float xdetect = 0;
+
     bool endStair = false;
     bool isJump = false;
     bool isPlay = false;
     bool wasShoot = true;
     float targetX = Constants.INFINITY;
+    float finalY = 0;
 
     void Awake()
     {
-        body = GetComponent<Rigidbody2D>();
         box = GetComponent<BoxCollider2D>();
         shooter = GetComponent<Shooter>();
-        gravityScale = body.gravityScale;
     }
 
     void Start()
@@ -51,45 +50,62 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if(frontObs)
+        if (!isJump)
         {
-            if(Math.Abs(transform.position.x - frontObs.transform.position.x) <= xdetect + Mathf.Abs(transform.localScale.x / 2) && !isJump)
+            if (targetX != Constants.INFINITY)
             {
-                Vector2 cur = transform.position;
-                Vector2 target = new Vector2(cur.x + direction.x * 0.5f, transform.position.y + frontObs.transform.localScale.y * jumpHeight);
-                StartCoroutine("Jump", target);
+                void CompleteTarget()
+                {
+                    transform.position = new Vector2(targetX, transform.position.y);
+                    Reverse();
+                    StartPlay();
+                }
+
+                if(direction.x < 0 && targetX < transform.position.x)
+                {
+                    transform.Translate(direction * speedX * Time.deltaTime);
+                    if (targetX >= transform.position.x) CompleteTarget();
+                }
+                else if(direction.x > 0 && targetX > transform.position.y)
+                {
+                    transform.Translate(direction * speedX * Time.deltaTime);
+                    if (targetX <= transform.position.x) CompleteTarget();
+                }
+            }
+            if (transform.position.y > finalY)
+            {
+                transform.Translate(Vector2.down * jump * 2 * Time.deltaTime);
+                if (transform.position.y < finalY) transform.position = new Vector2(transform.position.x, finalY);
+            }
+            else
+            {
+                if (frontObs)
+                {
+                    Vector2 obsPos = frontObs.transform.position;
+                    if (Math.Abs(transform.position.x - obsPos.x) <= detectX)
+                    {
+                        Vector2 cur = transform.position;
+                        Vector2 target = new Vector2(cur.x + direction.x * jumpX, transform.position.y + frontObs.transform.localScale.y * jumpHeight);
+                        isJump = true;
+                        StartCoroutine("Jump", target);
+                    }
+                    else
+                    {
+                        transform.Translate(direction * speedX * Time.deltaTime);
+                    }
+                }
             }
         }
     } 
 
-    void FixedUpdate()
-    {
-        if(!isJump && !isPlay)
-        {
-            if((direction.x < 0 && targetX < body.position.x) || (direction.x > 0 && targetX > body.position.x) || targetX == Constants.INFINITY)
-            {
-                body.MovePosition(body.position + direction * speedX * Time.fixedDeltaTime);
-            }
-            else
-            {
-                Reverse();
-                StartPlay();
-                isPlay = true;
-            }
-        }
-    }
-
     IEnumerator Jump(Vector2 target)
     {
-        isJump = true;
-        body.gravityScale = 0;
         while (transform.position.y < target.y)
         {
             transform.Translate(Vector2.up * jump * Time.deltaTime);
             yield return new WaitForEndOfFrame();
         }
         transform.position = new Vector2(transform.position.x, target.y);
-        body.gravityScale = gravityScale;
         if (target.x < transform.position.x)
         {
             while(transform.position.x > target.x)
@@ -106,12 +122,10 @@ public class PlayerController : MonoBehaviour
                 yield return new WaitForEndOfFrame();
             }
         }
-
         transform.position = new Vector2(target.x, transform.position.y);
         NewFontObs();
-        //body.gravityScale = gravityScale;
-        yield return new WaitForSeconds(delayMove);
         isJump = false;
+        yield return new WaitForSeconds(delayMove);
     }
 
     public void MoveToNextStair()
@@ -123,10 +137,17 @@ public class PlayerController : MonoBehaviour
     }
     void NewFontObs()
     {
+        float sY = 0;
+        if(frontObs) sY = frontObs.transform.localScale.y;
         frontObs = logic.NextFontObs();
         if(!frontObs)
         {
             targetX = transform.position.x + direction.x * lastTarget.GetRandomAsInt();
+            finalY += sY;
+        }
+        else
+        {
+            finalY = frontObs.transform.position.y;
         }
     }
     void Reverse()
@@ -137,6 +158,7 @@ public class PlayerController : MonoBehaviour
 
     void StartPlay()
     {
+        isPlay = true;
         shooter.StartAim();
         logic.Play();
         wasShoot = false;

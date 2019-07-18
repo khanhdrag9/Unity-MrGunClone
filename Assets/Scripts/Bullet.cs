@@ -4,7 +4,19 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    void OnCollisionEnter2D(Collision2D collision)
+    public Vector2 velocity { get; set; }
+
+    void Update()
+    {
+        transform.Translate(velocity * Time.deltaTime);
+    }
+
+    public void OnCollisionEnter2D(Collision2D collision)
+    {
+        CheckCollision(collision);
+    }
+
+    void CheckCollision(Collision2D collision)
     {
         if (collision.gameObject.tag == Constants.ENEMY_TAG)
         {
