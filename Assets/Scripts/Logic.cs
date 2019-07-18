@@ -12,32 +12,33 @@ public class Logic : MonoBehaviour
     int stairIndex = 0;
     int indexObs = 0;
     bool isKillingPlayer = false;
-    bool wasCheckResult = false;
+    bool wasCheckResult = true;
 
-    void Update()
+    void Awake()
     {
-        if (!isKillingPlayer && player.shooter.BulletEndedAll() && !wasCheckResult)
+        GameQuick.logic = this;
+    }
+
+    public void CheckShoot(float delay)
+    {
+        if (!wasCheckResult)
         {
-            CheckResultShoot();
+            Invoke("CheckResultShoot", delay);
         }
     }
 
-    void FixedUpdate()
-    {
-    }
-
-    void CheckResultShoot()
+    public void CheckResultShoot()
     {
         wasCheckResult = true;
-        if (enemyMgr.currentEnemy.isDied)
+        if (enemyMgr.currentEnemy && enemyMgr.currentEnemy.isDied)
         {
             enemyMgr.DestroyCurrentEnemy();
             NextEnemy();
         }
         else
         {
+            wasCheckResult = true;
             isKillingPlayer = true;
-            player.shooter.StopAim();
             Debug.Log("LOSE");
         }
     }

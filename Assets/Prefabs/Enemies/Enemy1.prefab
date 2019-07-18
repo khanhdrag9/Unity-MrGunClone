@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7712395787502406719}
   - component: {fileID: 7712395787502406718}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 7712395787509989279}
   - component: {fileID: 7712395787509989278}
   - component: {fileID: 7712395787509989265}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Enemy1
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -175,6 +175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speedX: 0
+  isDied: 0
 --- !u!50 &7712395787509989278
 Rigidbody2D:
   serializedVersion: 4

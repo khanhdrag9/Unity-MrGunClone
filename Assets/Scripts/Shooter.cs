@@ -51,6 +51,7 @@ public class Shooter : MonoBehaviour
 
         Vector2 offset = (shootPoint.transform.position - gun.transform.position).normalized;
         var obj = Instantiate(bullet, shootPoint.transform.position, gun.transform.rotation);
+        obj.gameObject.layer = gameObject.layer;
         shooted.Add(obj);
         var body = obj.GetComponent<Rigidbody2D>();
         body.velocity = offset * bulletSpeed;
@@ -70,13 +71,6 @@ public class Shooter : MonoBehaviour
             Destroy(o);
         shooted.Clear();
         StopAim();
-    }
-
-    public bool BulletEndedAll()
-    {
-        if (shooted.Count == 0) return false;
-        var unEnded = shooted.Find(o => o.IsEnd);
-        return unEnded == null;
     }
 }
 

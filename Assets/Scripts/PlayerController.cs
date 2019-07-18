@@ -44,6 +44,7 @@ public class PlayerController : MonoBehaviour
             if(Input.GetMouseButtonDown(0) && !wasShoot)
             {
                 shooter.Shoot();
+                shooter.StopAim();
                 wasShoot = true;
             }
         }
@@ -54,7 +55,6 @@ public class PlayerController : MonoBehaviour
             {
                 Vector2 cur = transform.position;
                 Vector2 target = new Vector2(cur.x + direction.x * 0.5f, transform.position.y + frontObs.transform.localScale.y);
-                Debug.Log("Jump : " + target);
                 StartCoroutine("Jump", target);
             }
         }
