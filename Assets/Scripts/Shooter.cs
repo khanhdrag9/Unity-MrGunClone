@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,13 +20,13 @@ public class Shooter : MonoBehaviour
 
     void Awake()
     {
-        aim.SetActive(false);
+        if(aim)aim.SetActive(false);
     }
     public void StartAim()
     {
         isAim = true;
         direction = 1;
-        aim.SetActive(true);
+        if(aim)aim.SetActive(true);
         gun.transform.localEulerAngles = new Vector3(0, 0, aimRanger.min + 1);
     }
 
@@ -42,14 +43,46 @@ public class Shooter : MonoBehaviour
         }
     }
 
+    public void ShootTo(Vector2 position)
+    {
+        StartCoroutine(AimTo(position));
+    }
+
+    IEnumerator AimTo(Vector2 position)
+    {
+        float angle = Vector2.Angle(transform.position, position);
+        if(angle < gun.transform.localEulerAngles.z)
+        {
+            while(angle < gun.transform.localEulerAngles.z)
+            {
+                gun.transform.Rotate(Vector3.forward * -1 * speed * Time.deltaTime);
+                yield return new WaitForEndOfFrame();
+            }
+        }
+        else
+        {
+            while (angle > gun.transform.localEulerAngles.z)
+            {
+                gun.transform.Rotate(Vector3.forward * 1 * speed * Time.deltaTime);
+                yield return new WaitForEndOfFrame();
+            }
+        }
+        gun.transform.localEulerAngles = new Vector3(0, 0, angle);
+        Shoot(position);
+    }
+
     public void Shoot()
     {
         //float angle = gun.transform.localEulerAngles.z;
         //float x = 10 * Mathf.Cos(angle * Mathf.Deg2Rad);
         //float y = 10 * Mathf.Sin(angle * Mathf.Deg2Rad);
         //Vector2 offset = new Vector2(x, y).normalized;
+        Shoot(shootPoint.transform.position);
+    }
 
-        Vector2 offset = (shootPoint.transform.position - gun.transform.position).normalized;
+    private void Shoot(Vector3 to)
+    {
+        Vector2 offset = (to - gun.transform.position).normalized;
         var obj = Instantiate(bullet, shootPoint.transform.position, gun.transform.rotation);
         obj.gameObject.layer = gameObject.layer;
         shooted.Add(obj);
@@ -60,7 +93,7 @@ public class Shooter : MonoBehaviour
     public void StopAim()
     {
         gun.transform.localEulerAngles = new Vector3(0, 0, aimRanger.min + 1);
-        aim.SetActive(false);
+        if(aim)aim.SetActive(false);
         isAim = false;
         direction = 1;
     }

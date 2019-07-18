@@ -7,6 +7,7 @@ public class Logic : MonoBehaviour
     [SerializeField] Map map = null;
     [SerializeField] EnemyManager enemyMgr = null;
     [SerializeField] PlayerController player = null;
+    [SerializeField] float delayCheck = 1f;
 
     Stair targetStair =  null;
     int stairIndex = 0;
@@ -19,10 +20,11 @@ public class Logic : MonoBehaviour
         GameQuick.logic = this;
     }
 
-    public void CheckShoot(float delay)
+    public void CheckShoot(float delay = -1)
     {
         if (!wasCheckResult)
         {
+            if (delay == -1) delay = delayCheck;
             Invoke("CheckResultShoot", delay);
         }
     }
@@ -37,8 +39,8 @@ public class Logic : MonoBehaviour
         }
         else
         {
-            wasCheckResult = true;
             isKillingPlayer = true;
+            enemyMgr.KillPlayer();
             Debug.Log("LOSE");
         }
     }

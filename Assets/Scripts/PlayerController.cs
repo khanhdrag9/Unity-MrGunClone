@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField] float speedX = 10;
     [SerializeField] float jump = 10;
+    [SerializeField] float jumpHeight = 1.5f;
+    [SerializeField] float delayMove = 0.1f;
     [SerializeField] Map map = null;
     [SerializeField] Logic logic = null;
     [SerializeField] Range lastTarget = null;
@@ -17,7 +19,7 @@ public class PlayerController : MonoBehaviour
     GameObject frontObs = null;
     Vector2 direction = Vector2.left;
     float gravityScale = 10;
-    float xdetect = 0.15f;
+    float xdetect = 0;
     bool endStair = false;
     bool isJump = false;
     bool isPlay = false;
@@ -54,7 +56,7 @@ public class PlayerController : MonoBehaviour
             if(Math.Abs(transform.position.x - frontObs.transform.position.x) <= xdetect + Mathf.Abs(transform.localScale.x / 2) && !isJump)
             {
                 Vector2 cur = transform.position;
-                Vector2 target = new Vector2(cur.x + direction.x * 0.5f, transform.position.y + frontObs.transform.localScale.y);
+                Vector2 target = new Vector2(cur.x + direction.x * 0.5f, transform.position.y + frontObs.transform.localScale.y * jumpHeight);
                 StartCoroutine("Jump", target);
             }
         }
@@ -81,14 +83,14 @@ public class PlayerController : MonoBehaviour
     {
         isJump = true;
         body.gravityScale = 0;
-
         while (transform.position.y < target.y)
         {
             transform.Translate(Vector2.up * jump * Time.deltaTime);
             yield return new WaitForEndOfFrame();
         }
         transform.position = new Vector2(transform.position.x, target.y);
-        if(target.x < transform.position.x)
+        body.gravityScale = gravityScale;
+        if (target.x < transform.position.x)
         {
             while(transform.position.x > target.x)
             {
@@ -107,7 +109,8 @@ public class PlayerController : MonoBehaviour
 
         transform.position = new Vector2(target.x, transform.position.y);
         NewFontObs();
-        body.gravityScale = gravityScale;
+        //body.gravityScale = gravityScale;
+        yield return new WaitForSeconds(delayMove);
         isJump = false;
     }
 

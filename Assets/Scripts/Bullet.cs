@@ -12,6 +12,6 @@ public class Bullet : MonoBehaviour
             GameQuick.logic.CheckShoot(0.25f);
         }
         else
-            GameQuick.logic.CheckShoot(1f);
+            GameQuick.logic.CheckShoot();
     }
 }

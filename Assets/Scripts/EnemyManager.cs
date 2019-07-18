@@ -6,6 +6,7 @@ public class EnemyManager : MonoBehaviour
 {
     [SerializeField] Enemy[] enemies = null;
     [SerializeField] Range xMore = null;
+    [SerializeField] PlayerController player = null;
     public Enemy currentEnemy { get; private set; }
 
     void Start()
@@ -25,6 +26,18 @@ public class EnemyManager : MonoBehaviour
         currentEnemy = null;
     }
 
+    public void KillPlayer()
+    {
+        if(currentEnemy)
+        {
+            var es = currentEnemy.GetComponent<Shooter>();
+            if (es)
+            {
+                es.ShootTo(player.transform.position);
+            }
+        }
+    }
+
     public Enemy SpawnAtStair(Stair stair, int index)
     {
         var enemy = Spawn(index);
@@ -32,6 +45,7 @@ public class EnemyManager : MonoBehaviour
         Transform highestTrans = highest.transform;
         float direction = highestTrans.localScale.x < 0 ? -1 : 1;
         Vector2 position = new Vector2(highestTrans.position.x + xMore.GetRandomAsInt() * direction, highestTrans.position.y + highest.transform.localScale.y);
+        position.x += direction * enemy.transform.localScale.x / 1.5f;
         enemy.transform.position = position;
         enemy.transform.localScale = enemy.transform.localScale * new Vector2(direction, 1);
         return enemy;
