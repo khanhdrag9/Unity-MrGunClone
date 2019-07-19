@@ -33,6 +33,7 @@ public class EnemyManager : MonoBehaviour
             var es = currentEnemy.GetComponent<Shooter>();
             if (es)
             {
+                Debug.Log("Enemy Shooter");
                 es.ShootTo(player.transform.position);
             }
         }

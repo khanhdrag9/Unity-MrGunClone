@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DragonBones;
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Range lastTarget = null;
     [SerializeField] float detectX = 0.5f;
     [SerializeField] float jumpX = 0.5f;
+    [SerializeField] UnityArmatureComponent bonesAnimation = null;
+
 
     BoxCollider2D box = null;
     public Shooter shooter { get; private set; }
@@ -33,10 +36,16 @@ public class PlayerController : MonoBehaviour
         shooter = GetComponent<Shooter>();
     }
 
-    void Start()
+    public void Start()
     {
+        Animate(Constants.PA_IDLE);
+    }
+
+    public void StartGame()
+    {
+        Animate(Constants.PA_RUN);
         NewFontObs();
-    }   
+    }
 
     void Update()
     {
@@ -44,6 +53,7 @@ public class PlayerController : MonoBehaviour
         {
             if(Input.GetMouseButtonDown(0) && !wasShoot)
             {
+                Animate(Constants.PA_SHOOT);
                 shooter.Shoot();
                 shooter.StopAim();
                 wasShoot = true;
@@ -134,6 +144,7 @@ public class PlayerController : MonoBehaviour
         targetX = Constants.INFINITY;
         NewFontObs();
     }
+
     void NewFontObs()
     {
         float sY = 0;
@@ -149,6 +160,7 @@ public class PlayerController : MonoBehaviour
             finalY = frontObs.transform.position.y;
         }
     }
+
     void Reverse()
     {
         direction.x *= -1;
@@ -158,8 +170,15 @@ public class PlayerController : MonoBehaviour
     void StartPlay()
     {
         isPlay = true;
+        Animate(Constants.PA_HOLD);
         shooter.StartAim();
         logic.Play();
         wasShoot = false;
+    }
+
+    //Animation
+    public void Animate(string animation)
+    {
+        bonesAnimation.animation.Play(animation);
     }
 }
