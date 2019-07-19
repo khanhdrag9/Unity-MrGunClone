@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public Vector2 velocity { get; set; }
+    public Vector2 velocity;
 
     void Update()
     {

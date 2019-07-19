@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if(isPlay)
+        if (isPlay)
         {
             if(Input.GetMouseButtonDown(0) && !wasShoot)
             {
@@ -60,13 +60,12 @@ public class PlayerController : MonoBehaviour
                     Reverse();
                     StartPlay();
                 }
-
-                if(direction.x < 0 && targetX < transform.position.x)
+                if (direction.x < 0 && targetX < transform.position.x)
                 {
                     transform.Translate(direction * speedX * Time.deltaTime);
                     if (targetX >= transform.position.x) CompleteTarget();
                 }
-                else if(direction.x > 0 && targetX > transform.position.y)
+                else if(direction.x > 0 && targetX > transform.position.x)
                 {
                     transform.Translate(direction * speedX * Time.deltaTime);
                     if (targetX <= transform.position.x) CompleteTarget();
@@ -86,7 +85,6 @@ public class PlayerController : MonoBehaviour
                     {
                         Vector2 cur = transform.position;
                         Vector2 target = new Vector2(cur.x + direction.x * jumpX, transform.position.y + frontObs.transform.localScale.y * jumpHeight);
-                        isJump = true;
                         StartCoroutine("Jump", target);
                     }
                     else
@@ -100,6 +98,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Jump(Vector2 target)
     {
+        isJump = true;
         while (transform.position.y < target.y)
         {
             transform.Translate(Vector2.up * jump * Time.deltaTime);

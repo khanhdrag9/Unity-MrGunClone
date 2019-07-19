@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5982203583816020656}
   - component: {fileID: 5982203583816020657}
-  - component: {fileID: 7794686358534089302}
   - component: {fileID: 3673759654581362061}
   - component: {fileID: 3554637197543296855}
+  - component: {fileID: 8481671119022001503}
   m_Layer: 0
   m_Name: SquareBL
   m_TagString: Stair
@@ -82,27 +82,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!50 &7794686358534089302
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5982203583816020663}
-  m_BodyType: 2
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!61 &3673759654581362061
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -141,3 +120,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1632c48cd3b7034448d193d9c868dd8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!50 &8481671119022001503
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5982203583816020663}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

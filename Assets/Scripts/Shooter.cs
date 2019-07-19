@@ -85,11 +85,11 @@ public class Shooter : MonoBehaviour
 
     private void Shoot(Vector3 to)
     {
-        float angle = gun.transform.localEulerAngles.z;
-        float x = 10 * Mathf.Cos(angle * Mathf.Deg2Rad);
-        float y = 10 * Mathf.Sin(angle * Mathf.Deg2Rad);
-        Vector2 offset = new Vector2(x, y).normalized;
-        //Vector2 offset = (to - gun.transform.position).normalized;
+        //float angle = gun.transform.localEulerAngles.z;
+        //float x = 10 * Mathf.Cos(angle * Mathf.Deg2Rad);
+        //float y = 10 * Mathf.Sin(angle * Mathf.Deg2Rad);
+        //Vector2 offset = new Vector2(x, y).normalized;
+        Vector2 offset = (to - gun.transform.position).normalized;
         var obj = Instantiate(bullet);
         obj.transform.position = shootPoint.transform.position;
         obj.gameObject.layer = gameObject.layer;
