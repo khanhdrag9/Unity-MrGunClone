@@ -18,12 +18,21 @@ public class Bullet : MonoBehaviour
 
     void CheckCollision(Collision2D collision)
     {
-        if (collision.gameObject.tag == Constants.ENEMY_TAG)
+        switch(collision.gameObject.tag)
         {
-            collision.gameObject.GetComponent<Enemy>().isDied = true;
-            GameQuick.logic.CheckShoot(0.25f);
+            case Constants.BULLET_DELETER_TAG:
+                //Debug.Log("Bullet delete");
+                //Destroy(gameObject);
+                GameQuick.logic.CheckShoot();
+                break;
+            case Constants.ENEMY_TAG:
+                collision.gameObject.GetComponent<Enemy>().isDied = true;
+                GameQuick.logic.CheckShoot(0.25f);
+                break;
+            default:
+                GameQuick.logic.CheckShoot();
+                break;
         }
-        else
-            GameQuick.logic.CheckShoot();
+            
     }
 }

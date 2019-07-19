@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Map : MonoBehaviour
 {
+    [SerializeField] GameObject land = null;
     [SerializeField]GameObject square = null;
     [SerializeField] float start = -7;
     [SerializeField] float end = 7;
@@ -44,6 +45,9 @@ public class Map : MonoBehaviour
             startOrder--;
             startLine += high;
         }
+        //for land
+        SpriteRenderer ls = land.GetComponent<SpriteRenderer>();
+        ls.color = from;
     }
 
     public void UpdateColor(int center)
@@ -57,6 +61,8 @@ public class Map : MonoBehaviour
             if (i < center) stair.SetColor(changeColor(curStair, 1), changeColor(curWall, 1), timeFade);
             else stair.SetColor(changeColor(curStair, -1), changeColor(curWall, -1), timeFade);
         }
+        //for land
+        land.GetComponent<Wall>().ColorTo(changeColor(land.GetComponent<SpriteRenderer>().color, 1), timeFade);
     }
 
     public Stair AddStair()
@@ -98,17 +104,10 @@ public class Map : MonoBehaviour
         obj.transform.position = new Vector2(position.x * rate.x, position.y * rate.y);
 
         var sprite = obj.GetComponent<SpriteRenderer>();
-        //sprite.flipX = from == Direction.LEFT ? true : false;
         sprite.color = color;
         sprite.sortingOrder = order;
 
         obj.transform.localScale = obj.transform.localScale * new Vector2(from == Direction.LEFT ? -1 : 1, 1);
-
-        //var boxC2 = obj.GetComponent<BoxCollider2D>();
-        //Vector2 newOffset = boxC2.offset;
-        //newOffset.x *= from == Direction.LEFT ? -1 : 1;
-        //boxC2.offset = newOffset;
-
         return obj;
     }
 

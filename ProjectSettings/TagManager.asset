@@ -7,6 +7,7 @@ TagManager:
   - Stair
   - Bullet
   - Enemy
+  - BulletDeleter
   layers:
   - Default
   - TransparentFX
