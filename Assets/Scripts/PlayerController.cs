@@ -38,12 +38,12 @@ public class PlayerController : MonoBehaviour
 
     public void Start()
     {
-        Animate(Constants.PA_IDLE);
+        Animate(Constants.PA_IDLE, -1);
     }
 
     public void StartGame()
     {
-        Animate(Constants.PA_RUN);
+        Animate(Constants.PA_RUN, -1);
         NewFontObs();
     }
 
@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
         {
             if(Input.GetMouseButtonDown(0) && !wasShoot)
             {
-                Animate(Constants.PA_SHOOT);
+                Animate(Constants.PA_SHOOT, 1);
                 shooter.Shoot();
                 shooter.StopAim();
                 wasShoot = true;
@@ -140,6 +140,7 @@ public class PlayerController : MonoBehaviour
     public void MoveToNextStair()
     {
         isPlay = false;
+        Animate(Constants.PA_RUN, -1);
         shooter.Reset();
         targetX = Constants.INFINITY;
         NewFontObs();
@@ -170,15 +171,15 @@ public class PlayerController : MonoBehaviour
     void StartPlay()
     {
         isPlay = true;
-        Animate(Constants.PA_HOLD);
+        Animate(Constants.PA_HOLD, -1);
         shooter.StartAim();
         logic.Play();
         wasShoot = false;
     }
 
     //Animation
-    public void Animate(string animation)
+    public void Animate(string animation, int number)
     {
-        bonesAnimation.animation.Play(animation);
+        bonesAnimation.animation.Play(animation, number);
     }
 }
