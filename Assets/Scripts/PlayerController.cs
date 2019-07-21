@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
     public void Start()
     {
         Animate(Constants.PA_IDLE, -1);
-        HoldEnergy(true);
+        shooter.gun.Charge(true);
     }
 
     public void StartGame()
@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour
             if(Input.GetMouseButtonDown(0) && !wasShoot)
             {
                 Animate(Constants.PA_SHOOT, 1);
-                HoldEnergy(false);
+                shooter.gun.Charge(false);
                 shooter.Shoot();
                 shooter.StopAim();
                 wasShoot = true;
@@ -144,7 +144,7 @@ public class PlayerController : MonoBehaviour
     {
         isPlay = false;
         Animate(Constants.PA_RUN, -1);
-        HoldEnergy(true);
+        shooter.gun.Charge(true);
         shooter.Reset();
         targetX = Constants.INFINITY;
         NewFontObs();
@@ -175,7 +175,6 @@ public class PlayerController : MonoBehaviour
     void StartPlay()
     {
         isPlay = true;
-        // HoldEnergy(true);
         Animate(Constants.PA_HOLD, -1);
         shooter.StartAim();
         logic.Play();
@@ -186,12 +185,5 @@ public class PlayerController : MonoBehaviour
     public void Animate(string animation, int number)
     {
         bonesAnimation.animation.Play(animation, number);
-    }
-
-    public void HoldEnergy(bool isEnable)
-    {
-        holdParticles.gameObject.SetActive(isEnable);
-        if(isEnable)holdParticles.Play(true);
-        else holdParticles.Stop(true);
     }
 }

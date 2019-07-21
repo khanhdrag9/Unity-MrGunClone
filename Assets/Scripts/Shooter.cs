@@ -5,28 +5,27 @@ using UnityEngine;
 
 public class Shooter : MonoBehaviour
 {
-    [SerializeField] GameObject gun = null;
     [SerializeField] Bullet bullet = null;
     [SerializeField] Range aimRanger = null;
-    [SerializeField] GameObject aim = null;
-    [SerializeField] GameObject shootPoint = null;
     [SerializeField] float speed = 1f;
     [SerializeField] float bulletSpeed = 50f;
+    public Gun gun;
 
     List<Bullet> shooted = new List<Bullet>();
 
     bool isAim = false;
     float direction = 1;
 
-    void Awake()
+    void Start()
     {
-        if(aim)aim.SetActive(false);
+        // gun.Aim(false);
     }
+
     public void StartAim()
     {
         isAim = true;
         direction = 1;
-        if(aim)aim.SetActive(true);
+        gun.Aim(true);
         gun.transform.localEulerAngles = new Vector3(0, 0, aimRanger.min + 1);
     }
 
@@ -80,7 +79,7 @@ public class Shooter : MonoBehaviour
 
     public void Shoot()
     {
-        Shoot(shootPoint.transform.position);
+        Shoot(gun.shootPoint.transform.position);
     }
 
     private void Shoot(Vector3 to)
@@ -90,17 +89,16 @@ public class Shooter : MonoBehaviour
         //float y = 10 * Mathf.Sin(angle * Mathf.Deg2Rad);
         //Vector2 offset = new Vector2(x, y).normalized;
         Vector2 offset = (to - gun.transform.position).normalized;
-        var obj = Instantiate(bullet);
-        obj.transform.position = shootPoint.transform.position;
+        var obj = gun.SpawnProfile();
         obj.gameObject.layer = gameObject.layer;
         shooted.Add(obj);
-        obj.velocity = offset * bulletSpeed;
+        // obj.velocity = offset * bulletSpeed;
     }
 
     public void StopAim()
     {
         gun.transform.localEulerAngles = new Vector3(0, 0, aimRanger.min + 1);
-        if(aim)aim.SetActive(false);
+        gun.Aim(false);
         isAim = false;
         direction = 1;
     }

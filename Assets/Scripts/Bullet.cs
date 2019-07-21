@@ -11,6 +11,11 @@ public class Bullet : MonoBehaviour
         transform.Translate(velocity * Time.deltaTime);
     }
 
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        Debug.Log("Trigger");
+    }
+
     public void OnCollisionEnter2D(Collision2D collision)
     {
         CheckCollision(collision);

@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 9050033135716132580}
   - component: {fileID: 7712395787509989278}
   - component: {fileID: 7712395787509989265}
-  m_Layer: 10
+  m_Layer: 0
   m_Name: Enemy1
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -220,15 +220,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e34cc5cafd0c487dada6e40a32218de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gun: {fileID: 4423892591769898209}
   bullet: {fileID: 2703584530754862740, guid: 8cf4e430d2c104a179a35a1e04c7ba0e, type: 3}
   aimRanger:
     min: 0
     max: 0
-  aim: {fileID: 0}
-  shootPoint: {fileID: 6565224716235635896}
   speed: 1
   bulletSpeed: 50
+  gun: {fileID: 0}
 --- !u!50 &7712395787509989278
 Rigidbody2D:
   serializedVersion: 4
