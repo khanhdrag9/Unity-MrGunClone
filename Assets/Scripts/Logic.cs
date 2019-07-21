@@ -85,13 +85,14 @@ public class Logic : MonoBehaviour
     public void Play()
     {
         wasCheckResult = false;
-        map.UpdateColor(stairIndex - 1);
+        // map.UpdateColor(stairIndex - 1);
         NextStair();
         enemyMgr.SpawnAtStair(targetStair, 0);
     }
 
     public void NextEnemy()
     {
+        map.UpdateColor(stairIndex - 1);
         player.MoveToNextStair();
     }
 

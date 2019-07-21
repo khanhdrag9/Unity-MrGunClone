@@ -18,6 +18,7 @@ public class Map : MonoBehaviour
     [SerializeField] int highMin;
     [SerializeField] int highMax;
     [SerializeField] float timeFade = 3;
+    [SerializeField] int colorValue = 2;
    
     int startColor = 0;
     int startOrder = 100;
@@ -58,11 +59,11 @@ public class Map : MonoBehaviour
             Color curStair = stair.stairList[0].GetComponent<SpriteRenderer>().color;
             Color curWall = stair.wall.GetComponent<SpriteRenderer>().color;
 
-            if (i < center) stair.SetColor(changeColor(curStair, 1), changeColor(curWall, 1), timeFade);
-            else stair.SetColor(changeColor(curStair, -1), changeColor(curWall, -1), timeFade);
+            if (i < center) stair.SetColor(changeColor(curStair, colorValue), changeColor(curWall, colorValue), timeFade);
+            else stair.SetColor(changeColor(curStair, -colorValue), changeColor(curWall, -colorValue), timeFade);
         }
         //for land
-        land.GetComponent<Wall>().ColorTo(changeColor(land.GetComponent<SpriteRenderer>().color, 1), timeFade);
+        land.GetComponent<Wall>().ColorTo(changeColor(land.GetComponent<SpriteRenderer>().color, colorValue), timeFade);
     }
 
     public Stair AddStair()
@@ -119,6 +120,9 @@ public class Map : MonoBehaviour
 
     Color changeColor(Color current, int direction)
     {
-        return current + direction * rateColor;
+        Color color = current + direction * rateColor;
+        // if(color.r < to.r && color.b < to.b && color.g < to.g)color = to;
+        // if(color.r > from.r && color.b > from.b && color.g > from.g)color = from;
+        return color;
     }
 }

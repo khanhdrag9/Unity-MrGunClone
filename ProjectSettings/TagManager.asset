@@ -4,8 +4,9 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Stair
+  - Shootable
   - Bullet
+  - Stair
   - Enemy
   - BulletDeleter
   layers:
@@ -17,9 +18,9 @@ TagManager:
   - UI
   - 
   - 
-  - Player
-  - Bullet
-  - Enemy
+  - Lighting
+  - Ground
+  - Postprocessing
   - 
   - 
   - 
@@ -42,9 +43,15 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Fire
+    uniqueID: 3804908061
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Particle
+    uniqueID: 3219688543
+    locked: 0
   - name: UI
-    uniqueID: 1805756919
+    uniqueID: 1341940679
     locked: 0
