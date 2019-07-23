@@ -15,6 +15,10 @@ public class Gun : MonoBehaviour
         
     }
 
+    void Update()
+    {
+    }
+
     public Bullet SpawnProfile()
     {
         return Instantiate(profile, transform);

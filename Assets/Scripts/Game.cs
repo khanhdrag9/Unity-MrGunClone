@@ -10,6 +10,11 @@ public class Game : MonoBehaviour
     public enum Status { WELCOM, PLAYING, VICTORY, DEFEAT};
     Status status;
 
+    void Awake()
+    {
+        Application.targetFrameRate = 60;
+    }
+
     void Start()
     {
         status = Status.WELCOM;

@@ -89,9 +89,6 @@ public class Shooter : MonoBehaviour
         float y = 10 * Mathf.Sin(angle * Mathf.Deg2Rad);
         Vector2 offset = new Vector2(x, y).normalized;
         var obj = gun.SpawnProfile();
-        Vector3 velocity = new Vector3(obj.effect.velocityOverLifetime.x.constant, 0, 0);
-        var vol = obj.effect.velocityOverLifetime;
-        vol.x = new ParticleSystem.MinMaxCurve(vol.x.constant * transform.localScale.x);
         obj.transform.position = gun.transform.position;
         obj.gameObject.layer = gameObject.layer;
         shooted.Add(obj);
