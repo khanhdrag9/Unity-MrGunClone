@@ -22,7 +22,7 @@ public class EnemyManager : MonoBehaviour
 
     public void DestroyCurrentEnemy()
     {
-        Destroy(currentEnemy.gameObject);
+        //Destroy(currentEnemy.gameObject);
         currentEnemy = null;
     }
 

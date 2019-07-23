@@ -18,7 +18,7 @@ public class Shooter : MonoBehaviour
 
     void Start()
     {
-        // gun.Aim(false);
+        gun.Aim(false);
     }
 
     public void StartAim()
@@ -79,25 +79,29 @@ public class Shooter : MonoBehaviour
 
     public void Shoot()
     {
-        Shoot(gun.shootPoint.transform.position);
+        Shoot(Vector3.zero);
     }
 
     private void Shoot(Vector3 to)
     {
-        //float angle = gun.transform.localEulerAngles.z;
-        //float x = 10 * Mathf.Cos(angle * Mathf.Deg2Rad);
-        //float y = 10 * Mathf.Sin(angle * Mathf.Deg2Rad);
-        //Vector2 offset = new Vector2(x, y).normalized;
-        Vector2 offset = (to - gun.transform.position).normalized;
+        float angle = gun.transform.localEulerAngles.z;
+        float x = 10 * Mathf.Cos(angle * Mathf.Deg2Rad);
+        float y = 10 * Mathf.Sin(angle * Mathf.Deg2Rad);
+        Vector2 offset = new Vector2(x, y).normalized;
         var obj = gun.SpawnProfile();
+        Vector3 velocity = new Vector3(obj.effect.velocityOverLifetime.x.constant, 0, 0);
+        var vol = obj.effect.velocityOverLifetime;
+        vol.x = new ParticleSystem.MinMaxCurve(vol.x.constant * transform.localScale.x);
+        obj.transform.position = gun.transform.position;
         obj.gameObject.layer = gameObject.layer;
         shooted.Add(obj);
-        // obj.velocity = offset * bulletSpeed;
+        offset.y = 0;
+        obj.velocity = offset * bulletSpeed;
     }
 
     public void StopAim()
     {
-        gun.transform.localEulerAngles = new Vector3(0, 0, aimRanger.min + 1);
+        //gun.transform.localEulerAngles = new Vector3(0, 0, aimRanger.min + 1);
         gun.Aim(false);
         isAim = false;
         direction = 1;
@@ -106,9 +110,10 @@ public class Shooter : MonoBehaviour
     public void Reset()
     {
         foreach(var o in shooted)
-            Destroy(o);
+            Destroy(o.gameObject);
         shooted.Clear();
         StopAim();
+        StopAllCoroutines();
     }
 }
 

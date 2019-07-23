@@ -17,7 +17,7 @@ public class Gun : MonoBehaviour
 
     public Bullet SpawnProfile()
     {
-        return Instantiate(profile, shootPoint.transform.position, transform.rotation);
+        return Instantiate(profile, transform);
     }
 
     public void Charge(bool isEnable)
@@ -32,6 +32,6 @@ public class Gun : MonoBehaviour
 
     public void Aim(bool isEnable)
     {
-        aim.SetActive(isEnable);
+        if(aim)aim.SetActive(isEnable);
     }
 }

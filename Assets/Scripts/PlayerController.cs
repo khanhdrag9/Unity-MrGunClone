@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float detectX = 0.5f;
     [SerializeField] float jumpX = 0.5f;
     [SerializeField] UnityArmatureComponent bonesAnimation = null;
-    [SerializeField] ParticleSystem holdParticles = null;
 
 
     BoxCollider2D box = null;
@@ -40,12 +39,13 @@ public class PlayerController : MonoBehaviour
     public void Start()
     {
         Animate(Constants.PA_IDLE, -1);
-        shooter.gun.Charge(true);
+        shooter.gun.Charge(false);
     }
 
     public void StartGame()
     {
         Animate(Constants.PA_RUN, -1);
+        shooter.gun.Charge(true);
         NewFontObs();
     }
 

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3673759654581362061}
   - component: {fileID: 3554637197543296855}
   - component: {fileID: 8481671119022001503}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SquareBL
   m_TagString: Stair
   m_Icon: {fileID: 0}
