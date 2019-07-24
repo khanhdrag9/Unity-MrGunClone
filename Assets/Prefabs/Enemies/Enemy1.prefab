@@ -307,7 +307,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 7712395787509989274}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: d6b138669f8d0934db56726a2cc8eae2, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -336,5 +336,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74083eb53a680c949a39754f1773b014, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effect: {fileID: 198917022394846920, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
+  effect: {fileID: 198917022394846920, guid: 5f5cdcd3ae31b10418552583e7a32080, type: 3}
+  aniDie: {fileID: 5799119006052375568, guid: 480d7bb09abb2e144863309c5049e02b, type: 3}
+  useParticle: 0
   destroyPoint: {fileID: 2363382676032452174}

@@ -4877,7 +4877,8 @@ MonoBehaviour:
   effect: {fileID: 0}
   destroyEffect: {fileID: 198856239026640498, guid: 9bba9cf244c53c5439505dfc96fdd11c,
     type: 3}
-  delayDestroy: 0.25
+  delayDestroy: 0.3
+  isCheck: 0
 --- !u!50 &1466702034
 Rigidbody2D:
   serializedVersion: 4
@@ -4892,7 +4893,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
@@ -4914,7 +4915,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.45
+  m_Radius: 0.3
 --- !u!1 &2491411288297600363
 GameObject:
   m_ObjectHideFlags: 0

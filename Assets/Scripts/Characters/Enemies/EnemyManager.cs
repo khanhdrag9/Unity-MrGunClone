@@ -22,7 +22,11 @@ public class EnemyManager : MonoBehaviour
 
     public void DestroyCurrentEnemy()
     {
-        if(currentEnemy) Destroy(currentEnemy.gameObject, 2f);
+        if(currentEnemy)
+        {
+            // currentEnemy.GetComponent<Die>().PlayEffect();  
+            Destroy(currentEnemy.gameObject, 2f);
+        } 
         currentEnemy = null;
     }
 

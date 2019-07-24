@@ -45,6 +45,12 @@ public class Bullet : MonoBehaviour
             case Constants.ENEMY_TAG:
                 other.GetComponent<Enemy>().isDied = true;
                 other.GetComponent<Die>().PlayEffect();
+                Rigidbody2D bulletBody = GetComponent<Rigidbody2D>();
+                Vector2 curVec = GetComponent<Rigidbody2D>().velocity;
+                // other.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                // other.GetComponent<Rigidbody2D>().AddForce(new Vector2(curVec.x / Mathf.Abs(curVec.x) * 20, 1000));
+                other.GetComponent<Rigidbody2D>().AddForce(curVec * 30);
+                // other.GetComponent<BoxCollider2D>().enabled = false;
                 GameQuick.logic.CheckShoot(0.25f);
                 CallDestroy();
                 break;
