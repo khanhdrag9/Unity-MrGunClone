@@ -24,6 +24,7 @@ public class Logic : MonoBehaviour
     {
         if (!wasCheckResult)
         {
+            wasCheckResult = true;
             if (delay == -1) delay = delayCheck;
             Invoke("CheckResultShoot", delay);
         }
@@ -31,9 +32,9 @@ public class Logic : MonoBehaviour
 
     public void CheckResultShoot()
     {
-        wasCheckResult = true;
-        if (enemyMgr.currentEnemy && enemyMgr.currentEnemy.isDied)
+        if (!enemyMgr.currentEnemy || (enemyMgr.currentEnemy && enemyMgr.currentEnemy.isDied))
         {
+            Debug.Log("Call");
             enemyMgr.DestroyCurrentEnemy();
             NextEnemy();
         }

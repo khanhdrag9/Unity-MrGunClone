@@ -5,6 +5,7 @@ using UnityEngine;
 public class Board : MonoBehaviour
 {
     [SerializeField] GameObject followTarget = null;
+    
     Vector3 distance;
     void Start()
     {

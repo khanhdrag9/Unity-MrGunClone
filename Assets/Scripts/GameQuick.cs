@@ -5,4 +5,5 @@ using UnityEngine;
 public static class GameQuick
 {
     public static Logic logic = null;
+    public static ParticleManager particleMgr = null;
 }

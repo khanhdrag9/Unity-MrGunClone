@@ -11,13 +11,14 @@ public class Shooter : MonoBehaviour
     [SerializeField] float bulletSpeed = 50f;
     public Gun gun;
 
-    List<Bullet> shooted = new List<Bullet>();
+    List<Bullet> bullets;
 
     bool isAim = false;
     float direction = 1;
 
     void Start()
     {
+        bullets = new List<Bullet>();
         gun.Aim(false);
     }
 
@@ -89,11 +90,14 @@ public class Shooter : MonoBehaviour
         float y = 10 * Mathf.Sin(angle * Mathf.Deg2Rad);
         Vector2 offset = new Vector2(x, y).normalized;
         var obj = gun.SpawnProfile();
+        bullets.Add(obj);
         obj.transform.position = gun.transform.position;
         obj.gameObject.layer = gameObject.layer;
-        shooted.Add(obj);
-        offset.y = 0;
-        obj.velocity = offset * bulletSpeed;
+        //offset.y = 0;
+        //obj.velocity = offset * bulletSpeed;
+        offset.x *= transform.localScale.x;
+        //obj.GetComponent<Rigidbody2D>().velocity = offset * bulletSpeed;
+        obj.GetComponent<Rigidbody2D>().AddForce(offset * bulletSpeed);
     }
 
     public void StopAim()
@@ -106,9 +110,10 @@ public class Shooter : MonoBehaviour
 
     public void Reset()
     {
-        foreach(var o in shooted)
-            Destroy(o.gameObject);
-        shooted.Clear();
+        foreach(var bullet in bullets)
+        {
+            bullet.isCheck = true;
+        }
         StopAim();
         StopAllCoroutines();
     }
