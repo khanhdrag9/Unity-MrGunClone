@@ -28,4 +28,10 @@ public class ParticleManager : MonoBehaviour
     }
 
     public void Add(ParticleSystem particle) => list.Add(particle);
+
+    public void Spawn(ParticleSystem particle, Vector3 position)
+    {
+        var p = Instantiate(particle);
+        p.transform.position = position;
+    }
 }

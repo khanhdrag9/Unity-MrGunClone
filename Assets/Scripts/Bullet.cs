@@ -60,7 +60,6 @@ public class Bullet : MonoBehaviour
     {
         if (!wasInvoke)
         {
-            Debug.Log("CallDestroy");
             wasInvoke = true;
             Invoke("FunToDestroy", delayDestroy);
         }
@@ -68,13 +67,8 @@ public class Bullet : MonoBehaviour
 
     void FunToDestroy()
     {
-        Debug.Log("Destroy");
-        Destroy(gameObject);
-    }
-
-    void OnDestroy()
-    {
         DestroyEffect();
+        Destroy(gameObject);
     }
 
     void DestroyEffect()

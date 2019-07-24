@@ -6510,6 +6510,7 @@ MonoBehaviour:
   highMax: 4
   timeFade: 1
   colorValue: 1
+  maxStair: 20
 --- !u!1 &774102833
 GameObject:
   m_ObjectHideFlags: 1
@@ -6810,6 +6811,7 @@ MonoBehaviour:
   enemyMgr: {fileID: 940659606}
   player: {fileID: 237763179}
   delayCheck: 1
+  stairIndex: 0
 --- !u!1 &1027450587
 GameObject:
   m_ObjectHideFlags: 0
@@ -12207,7 +12209,7 @@ PrefabInstance:
     - target: {fileID: 2491411287230547880, guid: 8a6fe0d338831a24d88420d241936f27,
         type: 3}
       propertyPath: delayDestroy
-      value: 1
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 1466702034, guid: 8a6fe0d338831a24d88420d241936f27, type: 3}
       propertyPath: m_AngularDrag

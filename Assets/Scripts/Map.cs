@@ -19,6 +19,7 @@ public class Map : MonoBehaviour
     [SerializeField] int highMax;
     [SerializeField] float timeFade = 3;
     [SerializeField] int colorValue = 2;
+    [SerializeField] int maxStair = 10;
    
     int startColor = 0;
     int startOrder = 100;
@@ -26,14 +27,14 @@ public class Map : MonoBehaviour
     Color rateColor = Color.white;
     Direction lastDirect = Direction.LEFT;
 
-    public List<Stair> stairs = new List<Stair>();
+    public Queue<Stair> stairs = new Queue<Stair>();
 
     public enum Direction { LEFT, RIGHT }
 
     void Start()
     {
         rateColor = (to - from) / numberColor;
-        int numberStair = 15;
+        int numberStair = Mathf.RoundToInt(maxStair / 1.5f);
         for(int i = 0; i < numberStair; i++)
         {
             int startX = Random.Range(startXMin, startXMax);
@@ -55,7 +56,7 @@ public class Map : MonoBehaviour
     {
         for (int i = 0; i < stairs.Count; i++)
         {
-            Stair stair = stairs[i];
+            Stair stair = stairs.ToArray()[i];
             Color curStair = stair.stairList[0].GetComponent<SpriteRenderer>().color;
             Color curWall = stair.wall.GetComponent<SpriteRenderer>().color;
 
@@ -94,8 +95,7 @@ public class Map : MonoBehaviour
 
         stair.SetEnableColliderStair(false);
         stair.SetEnableColliderWall(false);
-        stairs.Add(stair);
-
+        stairs.Enqueue(stair);
         return stair;
     }
 
@@ -110,6 +110,18 @@ public class Map : MonoBehaviour
 
         obj.transform.localScale = obj.transform.localScale * new Vector2(from == Direction.LEFT ? -1 : 1, 1);
         return obj;
+    }
+
+    public bool UpdateNumberStair()
+    {
+        if(stairs.Count > maxStair)
+        {
+            Stair s = stairs.Dequeue();
+            foreach(var o in s.stairList)Destroy(o);
+            Destroy(s.wall);
+            return true;
+        }
+        return false;
     }
 
     Color GetColor(int index)

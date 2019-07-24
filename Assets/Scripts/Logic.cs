@@ -10,7 +10,7 @@ public class Logic : MonoBehaviour
     [SerializeField] float delayCheck = 1f;
 
     Stair targetStair =  null;
-    int stairIndex = 0;
+    public int stairIndex = 0;
     int indexObs = 0;
     bool isKillingPlayer = false;
     bool wasCheckResult = true;
@@ -34,7 +34,6 @@ public class Logic : MonoBehaviour
     {
         if (!enemyMgr.currentEnemy || (enemyMgr.currentEnemy && enemyMgr.currentEnemy.isDied))
         {
-            Debug.Log("Call");
             enemyMgr.DestroyCurrentEnemy();
             NextEnemy();
         }
@@ -50,7 +49,7 @@ public class Logic : MonoBehaviour
     {
         stairIndex = index;
         indexObs = 0;
-        targetStair = map.stairs[stairIndex];
+        targetStair = map.stairs.ToArray()[stairIndex];
         targetStair.SetEnableColliderStair(true);
     }
 
@@ -77,7 +76,8 @@ public class Logic : MonoBehaviour
     public void NextStair()
     {
         map.AddStair();
-        stairIndex++;
+        bool isDelete = map.UpdateNumberStair();
+        if(!isDelete)stairIndex++;
         targetStair.SetEnableColliderWall(true);
         targetStair = null;
         GetCurrentStair(stairIndex);
