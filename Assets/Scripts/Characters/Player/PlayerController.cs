@@ -46,124 +46,6 @@ public class PlayerController : MonoBehaviour
     {
         Animate(Constants.PA_RUN, -1);
         shooter.gun.Charge(true);
-        NewFontObs();
-    }
-
-    void Update()
-    {
-        if (isPlay)
-        {
-            if(Input.GetMouseButtonDown(0) && !wasShoot)
-            {
-                Animate(Constants.PA_SHOOT, 1);
-                shooter.gun.Charge(false);
-                shooter.Shoot();
-                shooter.StopAim();
-                wasShoot = true;
-            }
-        }
-
-        if (!isJump)
-        {
-            if (targetX != Constants.INFINITY)
-            {
-                void CompleteTarget()
-                {
-                    transform.position = new Vector2(targetX, transform.position.y);
-                    Reverse();
-                    StartPlay();
-                }
-                if (direction.x < 0 && targetX < transform.position.x)
-                {
-                    transform.Translate(direction * speedX * Time.deltaTime);
-                    if (targetX >= transform.position.x) CompleteTarget();
-                }
-                else if(direction.x > 0 && targetX > transform.position.x)
-                {
-                    transform.Translate(direction * speedX * Time.deltaTime);
-                    if (targetX <= transform.position.x) CompleteTarget();
-                }
-            }
-            if (transform.position.y > finalY)
-            {
-                transform.Translate(Vector2.down * jump * 2 * Time.deltaTime);
-                if (transform.position.y < finalY) transform.position = new Vector2(transform.position.x, finalY);
-            }
-            else
-            {
-                if (frontObs)
-                {
-                    Vector2 obsPos = frontObs.transform.position;
-                    if (Math.Abs(transform.position.x - obsPos.x) <= detectX)
-                    {
-                        Vector2 cur = transform.position;
-                        Vector2 target = new Vector2(cur.x + direction.x * jumpX, transform.position.y + frontObs.transform.localScale.y * jumpHeight);
-                        StartCoroutine("Jump", target);
-                    }
-                    else
-                    {
-                        transform.Translate(direction * speedX * Time.deltaTime);
-                    }
-                }
-            }
-        }
-    } 
-
-    IEnumerator Jump(Vector2 target)
-    {
-        isJump = true;
-        while (transform.position.y < target.y)
-        {
-            transform.Translate(Vector2.up * jump * Time.deltaTime);
-            yield return new WaitForEndOfFrame();
-        }
-        transform.position = new Vector2(transform.position.x, target.y);
-        if (target.x < transform.position.x)
-        {
-            while(transform.position.x > target.x)
-            {
-                transform.Translate(Vector2.left * speedX * Time.deltaTime);
-                yield return new WaitForEndOfFrame();
-            }
-        }
-        else if(target.x > transform.position.y)
-        {
-            while(transform.position.x < target.x)
-            {
-                transform.Translate(Vector2.right * speedX * Time.deltaTime);
-                yield return new WaitForEndOfFrame();
-            }
-        }
-        transform.position = new Vector2(target.x, transform.position.y);
-        NewFontObs();
-        isJump = false;
-        yield return new WaitForSeconds(delayMove);
-    }
-
-    public void MoveToNextStair()
-    {
-        isPlay = false;
-        Animate(Constants.PA_RUN, -1);
-        shooter.gun.Charge(true);
-        shooter.Reset();
-        targetX = Constants.INFINITY;
-        NewFontObs();
-    }
-
-    void NewFontObs()
-    {
-        float sY = 0;
-        if(frontObs) sY = frontObs.transform.localScale.y;
-        frontObs = logic.NextFontObs();
-        if(!frontObs)
-        {
-            targetX = transform.position.x + direction.x * lastTarget.GetRandomAsInt();
-            finalY += sY;
-        }
-        else
-        {
-            finalY = frontObs.transform.position.y;
-        }
     }
 
     void Reverse()
@@ -177,7 +59,6 @@ public class PlayerController : MonoBehaviour
         isPlay = true;
         Animate(Constants.PA_HOLD, -1);
         shooter.StartAim();
-        logic.Play();
         wasShoot = false;
     }
 

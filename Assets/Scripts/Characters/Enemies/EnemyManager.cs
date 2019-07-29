@@ -43,18 +43,6 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    public Enemy SpawnAtStair(Stair stair, int index)
-    {
-        var enemy = Spawn(index);
-        var highest = stair.stairList[stair.stairList.Count - 1];
-        Transform highestTrans = highest.transform;
-        float direction = highestTrans.localScale.x < 0 ? -1 : 1;
-        Vector2 position = new Vector2(highestTrans.position.x + xMore.GetRandomAsInt() * direction, highestTrans.position.y + highest.transform.localScale.y);
-        position.x += direction * enemy.transform.localScale.x / 1.5f;
-        enemy.transform.position = position;
-        enemy.transform.localScale = enemy.transform.localScale * new Vector2(direction, 1);
-        return enemy;
-    }
 
     public Enemy Spawn(int index)
     {
