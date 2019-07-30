@@ -5,6 +5,7 @@
     public const string STAIR_TAG = "Stair";
     public const string ENEMY_TAG = "Enemy";
     public const string BULLET_DELETER_TAG = "BulletDeleter";
+    public const string NEXT_STEP_TAG = "NextStep";
 
     //Player Animation
     public const string PA_IDLE = "idle";

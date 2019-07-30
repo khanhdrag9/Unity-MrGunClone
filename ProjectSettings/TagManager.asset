@@ -9,6 +9,7 @@ TagManager:
   - Stair
   - Enemy
   - BulletDeleter
+  - NextStep
   layers:
   - Default
   - TransparentFX
